@@ -15,6 +15,7 @@ type Card struct {
 	Emoji string `json:"emoji"`
 	Description string `json:"description"`
 	Background string `json:"background"`
+	Tags []string `json:"tags"`
 }
 
 type CardArray struct {
