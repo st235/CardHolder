@@ -15,6 +15,8 @@ type Card struct {
 	Emoji string `json:"emoji"`
 	Description string `json:"description"`
 	Background string `json:"background"`
+	TextColor string `json:"text_color"`
+	CardType int `json:"card_type"`
 	Tags []string `json:"tags"`
 }
 
