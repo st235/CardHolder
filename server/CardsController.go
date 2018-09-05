@@ -28,12 +28,16 @@ func choose(ss []core.Card, size int, page int,
 }
 
 func GetCards(w http.ResponseWriter, request *http.Request) {
+	if !CheckAuth(request.Header.Get("token")) {
+		WriteError(http.StatusForbidden, w)
+		return
+	}
+
 	page, pe := strconv.ParseInt(request.URL.Query().Get("page"), 10, 32)
 	size, se := strconv.ParseInt(request.URL.Query().Get("size"), 10, 32)
 
 	if pe != nil || se != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("{\"error\": 0}"))
+		WriteError(http.StatusInternalServerError, w)
 		return
 	}
 
@@ -42,8 +46,7 @@ func GetCards(w http.ResponseWriter, request *http.Request) {
 	})
 
 	if len(cards) == 0 {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("{\"error\": 404}"))
+		WriteError(http.StatusNotFound, w)
 		return
 	}
 
@@ -52,11 +55,15 @@ func GetCards(w http.ResponseWriter, request *http.Request) {
 }
 
 func GetCard(w http.ResponseWriter, request *http.Request) {
+	if !CheckAuth(request.Header.Get("token")) {
+		WriteError(http.StatusForbidden, w)
+		return
+	}
+
 	id, pe := strconv.ParseInt(request.URL.Query().Get("id"), 10, 32)
 
 	if pe != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("{\"error\": 0}"))
+		WriteError(http.StatusInternalServerError, w)
 		return
 	}
 
@@ -65,8 +72,7 @@ func GetCard(w http.ResponseWriter, request *http.Request) {
 	})
 
 	if len(cards) == 0 {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("{\"error\": 404}"))
+		WriteError(http.StatusNotFound, w)
 		return
 	}
 
